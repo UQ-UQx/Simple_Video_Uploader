@@ -1,7 +1,7 @@
 {
-  "name": "react-php-base",
+  "name": "Simple-Video-Uploader",
   "version": "0.0.1",
-  "description": "ReactJS + PHP API",
+  "description": "Simple Video Uploader for LGDM course",
   "main": "index.js",
   "scripts": {
     "start": "webpack --watch",
@@ -15,14 +15,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ankithkonda/react-php-base.git"
+    "url": "git+https://github.com/ankithkonda/Simple_Video_Uploader.git"
   },
   "author": "Ankith Konda",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ankithkonda/react-php-base/issues"
+    "url": "https://github.com/ankithkonda/Simple_Video_Uploader/issues"
   },
-  "homepage": "https://github.com/ankithkonda/react-php-base#readme",
+  "homepage": "https://github.com/ankithkonda/Simple_Video_Uploader#readme",
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.24.0",
