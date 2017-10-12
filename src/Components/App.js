@@ -17,13 +17,18 @@ export default class App extends React.Component {
         super(props);
 
         let defaultState = {
-            
+            accepted: [],
+            rejected: []
         }
 
         props.appState ? this.state = props.appState : this.state = defaultState
 
+        this.updateState = this.updateState.bind(this)
     }
 
+    updateState(newState){
+        this.setState(newState)
+    }
 
 
     render(){
@@ -31,9 +36,9 @@ export default class App extends React.Component {
         
         return (
         <Container>
-            
-            <VideoUpload />
-            <VideoPreview />
+
+            <VideoUpload accepted={this.state.accepted} rejected={this.state.rejected} updateState={this.updateState} />
+            <VideoPreview accepted={this.state.accepted} rejected={this.state.rejected} />
 
         </Container>);
     }

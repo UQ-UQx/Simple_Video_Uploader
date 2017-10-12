@@ -1,0 +1,26 @@
+.video-dropzone{
+    width:100%;
+    height:300px;
+    border: 4px dashed black;
+
+   // @extend .stitched
+}
+
+.stitched {
+
+    height:300px;
+    
+    padding: 20px;
+    margin: 10px;
+    background: #FFFEF4;
+    color:#1F1E1D;
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 1.3em;
+    border: 2px dashed #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 0 4px #EBEAE0, 2px 1px 6px 4px rgba(10, 10, 0, 0.5);
+    text-shadow: -1px -1px #EBEAE0;
+    font-weight: normal;
+
+ }

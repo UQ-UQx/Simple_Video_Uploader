@@ -36,6 +36,7 @@
 			}
             //echo $custom_variable_by_user_string;
         ?>
+		<link rel="stylesheet" type="text/css" href="./normalize.css">
     </head>
     <body>
     <script type="text/javascript">
