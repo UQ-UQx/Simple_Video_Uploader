@@ -23,8 +23,10 @@ export default class VideoUpload extends Component{
                 onDrop={(accepted, rejected) => { 
                     console.log(accepted, rejected)
                     this.props.updateState({ accepted, rejected }); 
+                    
                 }}
                 className="video-dropzone"
+                multiple={false}
                 
             >
                 Drag and Drop

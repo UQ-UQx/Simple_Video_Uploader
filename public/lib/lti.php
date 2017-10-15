@@ -140,6 +140,21 @@ class Lti {
 		return $this->ltivars;
 	}
 
+	function course_id() {
+		if(isset($this->ltivars["context_id"])) {
+			return $this->ltivars["context_id"];
+		}
+		return 'Unknown context id (course id)';
+	}
+
+	function lti_consumer_key(){
+		if(isset($this->ltivars["oauth_consumer_key"])) {
+			return $this->ltivars["oauth_consumer_key"];
+		}
+		return 'Unknown oauth consumer key';
+	}
+
+
 	function usedummydata() {
 		$this->ltivars = array(
 

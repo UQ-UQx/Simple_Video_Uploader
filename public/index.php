@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title>ReactJS + PHP (LTI Support)</title>
          <?php
+
         	require_once('./config.php');
         	require_once('./lib/lti.php');
         	$lti = new Lti($config,true);
@@ -23,7 +24,14 @@
 
             $lti_id = $lti->lti_id();
 			$user_id = $lti->user_id();
+			$course_id = $lti->course_id();
+			$lti_user_roles = $lti->user_roles();
+			
 			$calldata = $lti->calldata();
+
+			$lti_grade_url = $lti->grade_url();
+			$lti_consumer_key = $lti->lti_consumer_key();
+			$result_sourcedid = $lti->result_sourcedid();
 
             $custom_variable_by_user_string = "woah";
 			if(isset($calldata{'custom_variable_by_user_string'})){
@@ -41,9 +49,16 @@
     <body>
     <script type="text/javascript">
 
-		$LTI_custom_variable_by_user_string = '<?php echo $custom_variable_by_user_string ?>';
-		$LTI_custom_variable_by_user_bool = JSON.parse('<?php echo json_encode($custom_variable_by_user_bool) ?>');
-        $LTI_is_valid = JSON.parse('<?php echo json_encode($lti->is_valid()) ?>'); 
+		$LTI_courseID = '<?php echo $course_id ?>';
+		$LTI_resourceID = '<?php echo $lti_id ?>';
+		$LTI_userID = '<?php echo $user_id ?>';
+		$LTI_user_roles = '<?php echo $lti_user_roles ?>';
+
+		$LTI_grade_url = '<?php echo $lti_grade_url ?>';
+		$LTI_consumer_key = '<?php echo $lti_consumer_key ?>';
+		$LTI_result_sourcedid = '<?php echo $result_sourcedid ?>';
+
+
 	</script>
     <div id="app"></div>
     <script type="text/javascript" src="./build/bundle.js"></script>

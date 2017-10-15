@@ -60,6 +60,10 @@ class MyApi
 			case "hello":
 				$this->hello($this->request->data);
 				break;
+			case "submit_video":
+				//error_log("formSubmit has been sent through");
+				$this->submit_video($this->request, $_FILES);
+				break;
 			default:
 				$this->reply("action switch failed",400);
 			break;
@@ -73,6 +77,40 @@ class MyApi
 		$data = json_decode($this->request->data);
 		$this->reply("Hello ".$data->name.", I'm PHP :)");
 	}
+
+	private function submit_video($request, $files){
+
+		error_log("WPAH ".json_encode($files));
+
+
+		
+
+
+
+	}
+
+
+	private function uploadImage($lti_id, $user_id, $files, $state){
+		
+		$fileName = $user_id."_video";
+		$path = getcwd();
+		$path_to_dir = dirname($path).'/data/'.$lti_id."/".$user_id;//."/".$files['file']['name'];
+		if(count($files) > 0){
+			
+			list($width, $height) = getimagesize($files['file']['tmp_name']);
+			move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
+		}else{
+			list($width, $height) = getimagesize(dirname($path)."/".$state->default_image_url);
+			copy(dirname($path)."/".$state->default_image_url, $path_to_dir."/".$fileName);
+		}
+		return array("filename"=>$fileName,"size"=>array("width"=>$width,"height"=>$height));
+	} 
+
+
+
+	// ___________________________ UTILITY FUNCTIONS ____________________________ //
+
+
 
 	/**
 	 * Prevent unauthenticated access to the backend
