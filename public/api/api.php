@@ -83,27 +83,28 @@ class MyApi
 		error_log("WPAH ".json_encode($files));
 
 
-		
+		$this->uploadVideo($request->lti_id, $request->user_id, $files["file"]);
 
 
 
 	}
 
 
-	private function uploadImage($lti_id, $user_id, $files, $state){
-		
-		$fileName = $user_id."_video";
-		$path = getcwd();
-		$path_to_dir = dirname($path).'/data/'.$lti_id."/".$user_id;//."/".$files['file']['name'];
-		if(count($files) > 0){
-			
-			list($width, $height) = getimagesize($files['file']['tmp_name']);
-			move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
-		}else{
-			list($width, $height) = getimagesize(dirname($path)."/".$state->default_image_url);
-			copy(dirname($path)."/".$state->default_image_url, $path_to_dir."/".$fileName);
+	private function uploadVideo($lti_id, $user_id, $file){
+		$uploads_dir = "../videos";
+		$path = $file['name'];
+		$ext = pathinfo($path, PATHINFO_EXTENSION);
+		$name = $user_id.".".$ext;
+		$tmp_name = $file['tmp_name'];
+
+		//create directory if doesn't exist
+		if (!is_dir("$uploads_dir/$lti_id/") && !mkdir("$uploads_dir/$lti_id/")){
+			die("Error creating folder $uploads_dir/$lti_id/");
 		}
-		return array("filename"=>$fileName,"size"=>array("width"=>$width,"height"=>$height));
+		
+		//upload
+		move_uploaded_file($tmp_name, "$uploads_dir/$lti_id/$name");
+		
 	} 
 
 
