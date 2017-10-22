@@ -96,7 +96,7 @@ class MyApi
 		$request = json_decode($request->data);
 		$lti_id = $request->lti_id;
 		$user_id = $request->user_id;
-
+		$submission = "";
 
 		$select_submissions = $this->db->query( 'SELECT * FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id) );
 		while ( $row = $select_submissions->fetch() ) {
