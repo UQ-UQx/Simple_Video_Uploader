@@ -4,3 +4,5 @@ node_modules/*
 public/config.php
 public/build
 public/videos
+.htpassword
+admin/build

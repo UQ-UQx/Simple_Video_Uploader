@@ -64,6 +64,8 @@ class MyApi
 				//error_log("formSubmit has been sent through");
 				$this->submit_video($this->request, $_FILES);
 				break;
+			case "isSubmitted":
+				$this->isSubmitted($this->request);
 			default:
 				$this->reply("action switch failed",400);
 			break;
@@ -83,14 +85,43 @@ class MyApi
 		error_log("WPAH ".json_encode($files));
 
 
-		$this->uploadVideo($request->lti_id, $request->user_id, $files["file"]);
+		$this->uploadVideo($request->course_id, $request->lti_id, $request->user_id, $files["file"]);
 
 
 
 	}
 
+	private function isSubmitted($request){
 
-	private function uploadVideo($lti_id, $user_id, $file){
+		$request = json_decode($request->data);
+		$lti_id = $request->lti_id;
+		$user_id = $request->user_id;
+
+
+		$select_submissions = $this->db->query( 'SELECT * FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id) );
+		while ( $row = $select_submissions->fetch() ) {
+			$submission = $row;
+		}
+
+		error_log("WPAH ".json_encode($submission));
+
+		
+		
+
+		$src = $submission->course_id."/".$submission->lti_id."/".$submission->filename;
+		
+		if($submission){
+			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id));
+		}else{
+			$this->reply(array("submitted"=>false, "src"=>"", "submission_id"=>""));
+		}
+
+	}
+
+
+	private function uploadVideo($course_id, $lti_id, $user_id, $file){
+		date_default_timezone_set('Australia/Brisbane');
+		
 		$uploads_dir = "../videos";
 		$path = $file['name'];
 		$ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -98,19 +129,60 @@ class MyApi
 		$tmp_name = $file['tmp_name'];
 
 		//create directory if doesn't exist
-		if (!is_dir("$uploads_dir/$lti_id/") && !mkdir("$uploads_dir/$lti_id/")){
-			die("Error creating folder $uploads_dir/$lti_id/");
+		if (!is_dir("$uploads_dir/$course_id/") && !mkdir("$uploads_dir/$course_id/")){
+			die("Error creating folder $uploads_dir/$course_id/");
+		}
+		if (!is_dir("$uploads_dir/$course_id/$lti_id") && !mkdir("$uploads_dir/$course_id/$lti_id")){
+			die("Error creating folder $uploads_dir/$course_id/$lti_id");
 		}
 		
-		//upload
-		move_uploaded_file($tmp_name, "$uploads_dir/$lti_id/$name");
+		if(move_uploaded_file($tmp_name, "$uploads_dir/$course_id/$lti_id/$name")){
+			
+			$modified = date('Y-m-d H:i:s');
+			if(!$this->checkTableExists("entries")){
+					$this->db->raw("CREATE TABLE entries (
+						id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+						course_id TEXT NOT NULL,
+						lti_id TEXT NOT NULL,
+						user_id TEXT NOT NULL,
+						filename TEXT NOT NULL,
+						created DATETIME DEFAULT NULL,
+						updated DATETIME DEFAULT NULL
+					)");
+			}
+			
+			$this->db->create('entries', array('course_id'=>$course_id,'lti_id'=>$lti_id, 'user_id'=>$user_id, 'filename'=>$name, 'created'=>$modified,'updated'=>$modified));
+			
+			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id));
+		}
 		
 	} 
+
+	
 
 
 
 	// ___________________________ UTILITY FUNCTIONS ____________________________ //
 
+	private function checkEntryExists($lti_id, $user_id){
+        $select = $this->db->query( 'SELECT entry FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        while ( $row = $select->fetch() ) {
+		   return true;
+        }
+		return false;
+	}   
+
+	private function checkTableExists($tableName){
+		$select = $this->db->query("SELECT * 
+			FROM information_schema.tables
+			WHERE table_schema = :dbname 
+				AND table_name = :tablename
+			LIMIT 1", array("dbname"=>$this->config["db"]["dbname"], "tablename"=>$tableName));
+		if($select->fetch()){
+			return true;
+		}
+		return false;
+	}
 
 
 	/**
@@ -177,6 +249,6 @@ if(isset($config['use_db']) && $config['use_db']) {
 	Db::config( 'password', $config['db']['password'] );
 }
 
-$db = null; //Db::instance(); //uncomment and enter db details in config to use database
+$db = Db::instance(); //uncomment and enter db details in config to use database
 $MyApi = new MyApi($db, $config);
 

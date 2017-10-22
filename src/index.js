@@ -3,13 +3,43 @@ import ReactDOM from "react-dom"
 
 import App from "./Components/App"
 
+import axios from "axios"
+
 import 'bootstrap/dist/css/bootstrap.css'
 
 const appContainer = document.getElementById('app');
-let state = {
-    input_val:"Welcome to React App with PHP API",
-    api_message:"",
+
+
+// var self = this;
+axios.get('../public/api/api.php', {
+    params: {
+        action: "isSubmitted",
+        data:{
+            user_id: $LTI_userID,
+            lti_id: $LTI_resourceID,
+        }
+    }
+})
+.then(function (response) {
+    let serverState = response.data
+
+    let submitted = serverState.submitted
+    let src = serverState.src
+    let submission_id = serverState.submission_id
+
+    loadApp({
+        submitted:submitted,
+        src:src,
+        submission_id:submission_id
+    })
+})
+.catch(function (error) {
+    console.log("FS")
+    
+    loadApp(null)
+});
+
+function loadApp(state){
+    console.log("WDASD",state)
+    ReactDOM.render(<App appState={state}/>, appContainer);
 }
-ReactDOM.render(<App appState={state}/>, appContainer);
-
-

@@ -6,6 +6,8 @@ import styled, {css} from 'styled-components'
 import uuid from 'uuid'
 
 import "../Stylesheets/Dropzone.scss"
+import VideoPreview from "./VideoPreview"
+import {Icon} from "react-fa"
 
 
 const Container = styled.div`
@@ -14,22 +16,79 @@ const Container = styled.div`
     ${ clearFix() }
 `
 
+const DropzoneContentContainer = styled.div`
+    width: 100%;
+    position: relative;
+    height:150px;
+`
+
+const DropzoneContent = styled.div`
+    height:0px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 0;
+    width:80%;
+    text-align: center;
+
+`
+
+const DropzoneContentItem = styled.div`
+
+    padding:5px;
+    text-align: center;
+    font-weight: bold;
+
+`
+
+
+
 export default class VideoUpload extends Component{
     render(){
-        return(<Container>
-            Upload Video:
-            <Dropzone
-                accept="video/*"
-                onDrop={(accepted, rejected) => { 
-                    console.log(accepted, rejected)
-                    this.props.updateState({ accepted, rejected }); 
-                    
-                }}
-                className="video-dropzone"
-                multiple={false}
+
+        let dropzoneContent = (
+            
+            <DropzoneContentContainer>
+                <DropzoneContent>
+                    <DropzoneContentItem> <Icon size="3x" name="cloud-upload"/> </DropzoneContentItem>
+                    <DropzoneContentItem>Drag and drop your screenshot image here or use the button below</DropzoneContentItem>
+                    <DropzoneContentItem>
+                        <button className="btn btn-default" onClick={(event)=>{this.refs.video_dropzone.open()}}>Browse</button>
+                    </DropzoneContentItem>
+                </DropzoneContent>
+            </DropzoneContentContainer>
+
+        )
+
+        if((this.props.accepted && (this.props.accepted.length > 0)) || this.props.src){
+            dropzoneContent = <VideoPreview src={this.props.src} accepted={this.props.accepted} rejected={this.props.rejected} />
                 
-            >
-                Drag and Drop
+        }
+
+
+
+        return(
+        <Container>
+
+                <Dropzone
+                    accept="video/*"
+                    onDrop={(accepted, rejected) => { 
+                        console.log(accepted, rejected)
+                        this.props.updateState({ accepted, rejected }); 
+                        
+                    }}
+                    disableClick={true}
+                    className="video-dropzone"
+                    multiple={false}
+                    ref="video_dropzone"
+
+                >
+
+                {dropzoneContent}
+
+
             </Dropzone>
         </Container>)
     }

@@ -12,7 +12,6 @@ import "../../node_modules/video-react/dist/video-react.css"; // import css for 
 
 const Container = styled.div`
     width:100%;
-    height:100px;
     background-color:#FFFAD0;
     ${ clearFix() }
 `
@@ -28,16 +27,14 @@ export default class VideoPreview extends Component{
         let player = "Please Upload a Video"
         console.log(this.props)
 
-        if(this.props.accepted && (this.props.accepted.length > 0)){
+        if((this.props.accepted && (this.props.accepted.length > 0)) || this.props.src){
            player = (<Player
             playsInline
-            poster="/assets/poster.png"
-            src={this.props.accepted[0].preview}
+            src={this.props.src? "../public/videos/"+this.props.src:this.props.accepted[0].preview}
             />)
         }
 
         return(<Container>
-            This is a component for VideoPreview
 
             
             {player}
