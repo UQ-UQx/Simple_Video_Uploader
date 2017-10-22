@@ -37,6 +37,56 @@ var plugins = [
 
 ]
 
+var loaders = [
+    {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        loader: "babel-loader",
+        query: {
+          presets: ["env", "stage-0", "react"],
+          plugins: ["react-html-attrs", "transform-class-properties", "transform-decorators-legacy"]
+        }
+    },
+    {
+        test: /\.json$/,
+        exclude: /(node_modules)/,
+        loader:"json-loader",
+    },
+    {
+        test: /\.scss$/,
+        exclude: /(node_modules)/,
+        loader:"style-loader!css-loader!sass-loader"
+    },
+    {
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
+    },
+    {
+        test: /\.png$/,
+        loader: "url-loader?limit=100000"
+    },
+    {
+        test: /\.jpg$/,
+        loader: "file-loader"
+    },
+    {
+        test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+    },
+    {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+    },
+    {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'file-loader'
+    },
+    {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+    }
+]
+
 var client = {
     devtool: "#cheap-module-eval-source-map",
     entry: "./src/index.js",
@@ -49,55 +99,7 @@ var client = {
     //target: 'node',
     //node: {fs: "empty"},
     module:{
-        loaders:[
-            {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                loader: "babel-loader",
-                query: {
-                  presets: ["env", "stage-0", "react"],
-                  plugins: ["react-html-attrs", "transform-class-properties", "transform-decorators-legacy"]
-                }
-            },
-            {
-                test: /\.json$/,
-                exclude: /(node_modules)/,
-                loader:"json-loader",
-            },
-            {
-                test: /\.scss$/,
-                exclude: /(node_modules)/,
-                loader:"style-loader!css-loader!sass-loader"
-            },
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader"
-            },
-            {
-                test: /\.png$/,
-                loader: "url-loader?limit=100000"
-            },
-            {
-                test: /\.jpg$/,
-                loader: "file-loader"
-            },
-            {
-                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader'
-            },
-            {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
-            }
-        ]
+        loaders:loaders
     }
 };
 
@@ -113,55 +115,7 @@ var admin = {
     //target: 'node',
     //node: {fs: "empty"},
     module:{
-        loaders:[
-            {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                loader: "babel-loader",
-                query: {
-                  presets: ["env", "stage-0", "react"],
-                  plugins: ["react-html-attrs", "transform-class-properties", "transform-decorators-legacy"]
-                }
-            },
-            {
-                test: /\.json$/,
-                exclude: /(node_modules)/,
-                loader:"json-loader",
-            },
-            {
-                test: /\.scss$/,
-                exclude: /(node_modules)/,
-                loader:"style-loader!css-loader!sass-loader"
-            },
-            {
-                test: /\.css$/,
-                loader: "style-loader!css-loader"
-            },
-            {
-                test: /\.png$/,
-                loader: "url-loader?limit=100000"
-            },
-            {
-                test: /\.jpg$/,
-                loader: "file-loader"
-            },
-            {
-                test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
-            },
-            {
-                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
-            },
-            {
-                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'file-loader'
-            },
-            {
-                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
-            }
-        ]
+        loaders:loaders
     }
 };
 
