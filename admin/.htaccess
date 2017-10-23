@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName “Restricted”
+AuthUserFile /Users/ankithkonda/Developer/uqx/LGDM/Simple_Video_Uploader/.htpassword
+Require valid-user

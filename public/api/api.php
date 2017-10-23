@@ -109,7 +109,7 @@ class MyApi
 		
 
 		
-		if($submission){
+		if($submission && ($submission != "")){
 			$src = $submission->course_id."/".$submission->lti_id."/".$submission->filename;			
 			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id));
 		}else{
