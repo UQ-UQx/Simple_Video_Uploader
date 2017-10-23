@@ -53,7 +53,7 @@ export default class VideoUpload extends Component{
             <DropzoneContentContainer>
                 <DropzoneContent>
                     <DropzoneContentItem> <Icon size="3x" name="cloud-upload"/> </DropzoneContentItem>
-                    <DropzoneContentItem>Drag and drop your screenshot image here or use the button below</DropzoneContentItem>
+                    <DropzoneContentItem>Drag and drop your video here or use the button below</DropzoneContentItem>
                     <DropzoneContentItem>
                         <button className="btn btn-default" onClick={(event)=>{this.refs.video_dropzone.open()}}>Browse</button>
                     </DropzoneContentItem>
