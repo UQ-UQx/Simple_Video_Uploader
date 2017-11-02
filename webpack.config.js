@@ -4,6 +4,8 @@ var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var path = require('path');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+
+
 var browserSyncPlugin = new BrowserSyncPlugin({
     // use existing Apache virtual host
     proxy: 'http://localhost:80/',

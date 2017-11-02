@@ -1,4 +1,3 @@
-"use strict";
 var webpack = require("webpack");
 
 var webpackConfig = require('./webpack.config.js');
@@ -7,11 +6,11 @@ var webpackConfig = require('./webpack.config.js');
 // strip out //console.log statements
 webpackConfig.forEach(function(object, index){
 
-        object.devtool = false;
+        object.devtool = "eval";
         object.module.loaders.push({
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: 'strip-loader?strip[]=//console.log'
+                loader: 'strip-loader?strip[]=console.log'
         });
 
 })
