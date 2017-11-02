@@ -64,6 +64,10 @@ class MyApi
 				//error_log("formSubmit has been sent through");
 				$this->submit_video($this->request, $_FILES);
 				break;
+			case "remove_video":
+				//error_log("formSubmit has been sent through");
+				$this->remove_video($this->request);
+				break;
 			case "isSubmitted":
 				$this->isSubmitted($this->request);
 			default:
@@ -78,6 +82,18 @@ class MyApi
     public function hello(){
 		$data = json_decode($this->request->data);
 		$this->reply("Hello ".$data->name.", I'm PHP :)");
+	}
+
+	private function remove_video($request){
+		//$request = json_decode($request->data);
+		$src = $request->src;
+		$lti_id = $request->lti_id;
+		$user_id = $request->user_id;
+		$this->db->query( 'DELETE FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id) );
+		
+
+		unlink("../videos/".$src);
+
 	}
 
 	private function submit_video($request, $files){
@@ -107,13 +123,12 @@ class MyApi
 
 		
 		
-
 		
 		if($submission && ($submission != "")){
 			$src = $submission->course_id."/".$submission->lti_id."/".$submission->filename;			
-			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id));
+			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id, "current_date"=>gmdate("Y-m-d\TH:i:s\Z")));
 		}else{
-			$this->reply(array("submitted"=>false, "src"=>"", "submission_id"=>""));
+			$this->reply(array("submitted"=>false, "src"=>"", "submission_id"=>"", "current_date"=>gmdate("Y-m-d\TH:i:s\Z")));
 		}
 
 	}
@@ -153,7 +168,7 @@ class MyApi
 			
 			$this->db->create('entries', array('course_id'=>$course_id,'lti_id'=>$lti_id, 'user_id'=>$user_id, 'filename'=>$name, 'created'=>$modified,'updated'=>$modified));
 			
-			$this->reply(array("submitted"=>true, "src"=>$src, "submission_id"=>$user_id));
+			$this->reply(array("submitted"=>true, "src"=>"$uploads_dir/$course_id/$lti_id/$name", "submission_id"=>$user_id));
 		}
 		
 	} 

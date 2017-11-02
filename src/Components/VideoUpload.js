@@ -46,8 +46,14 @@ const DropzoneContentItem = styled.div`
 
 
 export default class VideoUpload extends Component{
-    render(){
 
+    render(){
+        let disabledFlag = "disabled"
+
+        if(!this.props.past_deadline){
+            disabledFlag = ""
+        }
+        
         let dropzoneContent = (
             
             <DropzoneContentContainer>
@@ -55,7 +61,12 @@ export default class VideoUpload extends Component{
                     <DropzoneContentItem> <Icon size="3x" name="cloud-upload"/> </DropzoneContentItem>
                     <DropzoneContentItem>Drag and drop your video here or use the button below</DropzoneContentItem>
                     <DropzoneContentItem>
-                        <button className="btn btn-default" onClick={(event)=>{this.refs.video_dropzone.open()}}>Browse</button>
+                        <button className={"btn btn-default "+disabledFlag} onClick={(event)=>{
+                            if(!this.props.past_deadline){
+                                this.refs.video_dropzone.open()
+                            } 
+
+                        }}>Browse</button>
                     </DropzoneContentItem>
                 </DropzoneContent>
             </DropzoneContentContainer>
@@ -76,7 +87,10 @@ export default class VideoUpload extends Component{
                     accept="video/*"
                     onDrop={(accepted, rejected) => { 
                         console.log(accepted, rejected)
-                        this.props.updateState({ accepted, rejected }); 
+                        if(!this.props.past_deadline){
+                            this.props.updateState({ accepted, rejected }); 
+                            
+                        }
                         
                     }}
                     disableClick={true}

@@ -45,6 +45,8 @@
             //echo $custom_variable_by_user_string;
         ?>
 		<link rel="stylesheet" type="text/css" href="./normalize.css">
+		<link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+
     </head>
     <body>
     <script type="text/javascript">

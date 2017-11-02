@@ -5,6 +5,9 @@ import App from "./Components/App"
 
 import axios from "axios"
 
+import moment from "moment"
+import {tz} from "moment-timezone"
+
 import 'bootstrap/dist/css/bootstrap.css'
 
 const appContainer = document.getElementById('app');
@@ -26,11 +29,25 @@ axios.get('../public/api/api.php', {
     let submitted = serverState.submitted
     let src = serverState.src
     let submission_id = serverState.submission_id
+    // console.log(serverState,moment().tz("utc").format("LLLL"),moment(serverState.current_date).tz("utc").format("LLLL"))
+    // console.log(moment().tz("utc").format("LLLL") === moment(serverState.current_date).tz("utc").format("LLLL"))
+    
+    const dueDate = moment({ year :2017, M :10, day :2, hour :23, minute :30})
+
+    let past_deadline = false;
+    if(moment().tz("utc").isSameOrAfter(dueDate)){
+        console.log("WHAT", moment().tz("utc").format("LLLL"), dueDate.format("LLLL"))
+        
+        past_deadline = true;
+    }
+
+    
 
     loadApp({
         submitted:submitted,
         src:src,
-        submission_id:submission_id
+        submission_id:submission_id,
+        past_deadline:past_deadline
     })
 })
 .catch(function (error) {
