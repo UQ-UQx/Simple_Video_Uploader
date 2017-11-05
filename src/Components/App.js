@@ -106,7 +106,7 @@ export default class App extends React.Component {
 
         if(this.state.src && (this.state.src !== "")){
 
-            console.log("WHY ARE YOU RUNNING!!", this.state.src, (this.state.src !== ""))
+            //console.log("WHY ARE YOU RUNNING!!", this.state.src, (this.state.src !== ""))
             const postData = new FormData();
 
             postData.append('action', "remove_video");
@@ -207,10 +207,10 @@ export default class App extends React.Component {
         )
         let submissionDetails = ""
 
-        console.log(this.state)
+        //console.log(this.state)
 
         if(this.state.accepted && (this.state.accepted.length > 0)){
-            console.log("red", this.state.submitting)
+            //console.log("red", this.state.submitting)
             if(this.state.submitting){
                 disabledFlag = "disabled"
                 submitButtonMessage = (<div>Submitting <Icon spin name="spinner"/></div>)
@@ -236,7 +236,7 @@ export default class App extends React.Component {
         }
 
         if(this.state.src && (this.state.src != "")){
-            console.log("FDSHFJKDLs",this.state.src != "")
+            //console.log("FDSHFJKDLs",this.state.src != "")
 
             
             removeImageContent = (
@@ -277,11 +277,16 @@ export default class App extends React.Component {
         let deadlineLabel = ""
 
         if(this.state.dueDate){
-            deadlineLabel = <DeadlineLabel>
+            deadlineLabel = (<DeadlineLabel>
                 Submission Due by: {this.state.dueDate.format("LLLL")} UTC
-            </DeadlineLabel>
+            </DeadlineLabel>)
         }
-       
+        
+
+        if(this.state.past_deadline){
+            deadlineLabel = ""
+        }
+
         return (
         <Container>
 
@@ -296,7 +301,7 @@ export default class App extends React.Component {
             <VideoUpload past_deadline={this.state.past_deadline} src={this.state.src} accepted={this.state.accepted} rejected={this.state.rejected} updateState={this.updateState} />
             {buttonsContainer}
             {submissionDetails}
-            {!this.state.past_deadline? deadlineLabel:""}
+            {deadlineLabel}
 
         </Container>);
     }

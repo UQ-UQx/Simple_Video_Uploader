@@ -90,7 +90,7 @@ var loaders = [
 ]
 
 var client = {
-    devtool: "#cheap-module-eval-source-map",
+    devtool: "eval",
     entry: "./src/index.js",
     output: {
         path: path.join(__dirname,"public/build"),
@@ -106,7 +106,7 @@ var client = {
 };
 
 var admin = {
-    devtool: "#cheap-module-eval-source-map",
+    devtool: "eval",
     entry: "./admin/src/index.js",
     output: {
         path: path.join(__dirname,"admin/build"),
