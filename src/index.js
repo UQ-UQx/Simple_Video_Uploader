@@ -30,7 +30,9 @@ axios.get('../public/api/api.php', {
     let src = serverState.src
     let submission_id = serverState.submission_id
 
-    const dueDate = moment({ year :2017, M :10, day :2, hour :23, minute :30})
+    const dueDate = moment({ year :2017, M :10, day :27, hour :23, minute :30})
+
+    console.log(dueDate.format("LLLL"))
 
     let past_deadline = false;
     if(moment().tz("utc").isSameOrAfter(dueDate)){
@@ -44,7 +46,8 @@ axios.get('../public/api/api.php', {
         submitted:submitted,
         src:src,
         submission_id:submission_id,
-        past_deadline:past_deadline
+        past_deadline:past_deadline,
+        dueDate:dueDate
     })
 })
 .catch(function (error) {    

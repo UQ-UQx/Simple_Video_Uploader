@@ -18,6 +18,14 @@ const Container = styled.div`
 
 `
 
+const DeadlineLabel = styled.div`
+    width:100%;
+    text-align:center;
+    font-size:15px;
+    font-weight:bold;
+    margin-top:15px;
+`
+
 const Button = styled.button`
 
    margin:5px;
@@ -73,7 +81,8 @@ export default class App extends React.Component {
             due:null,
             max:null,
             src:null,
-            past_deadline:false
+            past_deadline:false,
+            dueDate:null
         }
 
         props.appState ? this.state = {...defaultState, ...props.appState} : this.state = defaultState
@@ -265,6 +274,13 @@ export default class App extends React.Component {
 
         }
 
+        let deadlineLabel = ""
+
+        if(this.state.dueDate){
+            deadlineLabel = <DeadlineLabel>
+                Submission Due by: {this.state.dueDate.format("LLLL")} UTC
+            </DeadlineLabel>
+        }
        
         return (
         <Container>
@@ -280,7 +296,7 @@ export default class App extends React.Component {
             <VideoUpload past_deadline={this.state.past_deadline} src={this.state.src} accepted={this.state.accepted} rejected={this.state.rejected} updateState={this.updateState} />
             {buttonsContainer}
             {submissionDetails}
-            
+            {!this.state.past_deadline? deadlineLabel:""}
 
         </Container>);
     }
