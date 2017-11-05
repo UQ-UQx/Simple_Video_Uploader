@@ -108,6 +108,18 @@ class MyApi
 	}
 
 	private function isSubmitted($request){
+		
+		if(!$this->checkTableExists("entries")){
+					$this->db->raw("CREATE TABLE entries (
+						id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+						course_id TEXT NOT NULL,
+						lti_id TEXT NOT NULL,
+						user_id TEXT NOT NULL,
+						filename TEXT NOT NULL,
+						created DATETIME DEFAULT NULL,
+						updated DATETIME DEFAULT NULL
+					)");
+			}
 
 		$request = json_decode($request->data);
 		$lti_id = $request->lti_id;
