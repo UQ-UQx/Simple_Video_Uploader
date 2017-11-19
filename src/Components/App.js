@@ -10,6 +10,7 @@ import {Icon} from "react-fa"
 
 import moment from "moment"
 import {tz} from "moment-timezone"
+import {duration} from "moment-duration-format"
 import { Line } from 'rc-progress';
 
 
