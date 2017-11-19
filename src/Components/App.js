@@ -96,7 +96,8 @@ export default class App extends React.Component {
             progress:0,
             uploadStartMoment:null,
             currentLoaded:0,
-            speed:0
+            speed:0,
+            timeRemaining:null
         }
 
         props.appState ? this.state = {...defaultState, ...props.appState} : this.state = defaultState
@@ -184,18 +185,21 @@ export default class App extends React.Component {
 
                   let chunk = progressEvent.loaded - prevLoaded
 
-                  console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
+                  //console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
 
-                    let speed =  ((progressEvent.loaded/1000 )/secondsElapsed).toFixed(2)
+                    let speed =  ((progressEvent.loaded/1000 )/secondsElapsed)
 
+                    let timeRemaining = ((progressEvent.total - progressEvent.loaded)/1000)/speed
                     
-                  console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent.loaded, speed);
+                    speed = speed.toFixed(2)
+
+                  console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent, speed, timeRemaining);
 
                   prevLoaded = progressEvent.loaded
 
                   this.setState({
                       progress:percentCompleted,
-                      speed:speed
+                      speed:speed,
                   })
                 }
               }
@@ -259,6 +263,7 @@ export default class App extends React.Component {
                 submitButtonMessage = (<div>Submitting <Icon spin name="spinner"/></div>)
                 percentCompletedBar =   (<ProgressContainer>
                     <h4>{this.state.progress}% Uploaded ({this.state.speed} Kbps)</h4>
+                    <h4>{this.state.timeRemaining ? this.state.timeRemaining.format("Hmmss"):''}</h4>
                     <Line percent={this.state.progress+''} strokeWidth="2" strokeColor="#06AFD4" />
                 </ProgressContainer>)
                 
