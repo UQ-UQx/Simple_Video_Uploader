@@ -265,7 +265,7 @@ export default class App extends React.Component {
                 submitButtonMessage = (<div>Submitting <Icon spin name="spinner"/></div>)
                 percentCompletedBar =   (<ProgressContainer>
                     <h4>{this.state.progress}% Uploaded ({this.state.speed} Kbps)</h4>
-                    <h4>{this.state.timeRemaining ? "Upload Time Remaining: "+moment.duration(this.state.timeRemaining, "seconds").format("h:mm:ss", { trim: false }) :''}</h4>
+                    <h4>{this.state.timeRemaining ? "Upload Time Remaining: "+moment.duration(this.state.timeRemaining, "seconds").format("hh:mm:ss", { trim: false }) :''}</h4>
                     <Line percent={this.state.progress+''} strokeWidth="2" strokeColor="#06AFD4" />
                 </ProgressContainer>)
                 
