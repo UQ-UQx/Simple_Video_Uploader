@@ -10,6 +10,7 @@ import {Icon} from "react-fa"
 
 import moment from "moment"
 import {tz} from "moment-timezone"
+import { Line } from 'rc-progress';
 
 
 // See styled-components documentation for further api info
@@ -65,6 +66,15 @@ const SubmissionDeadlineMessage = styled.div`
     font-weight:bold;
     
 `
+const ProgressContainer = styled.div`
+
+    width:50%;
+    text-align:center;
+    margin:0 auto;
+
+`
+
+let prevLoaded = 0
 
 export default class App extends React.Component {
     constructor(props){
@@ -82,7 +92,10 @@ export default class App extends React.Component {
             max:null,
             src:null,
             past_deadline:false,
-            dueDate:null
+            dueDate:null,
+            progress:0,
+            uploadStartMoment:null,
+            currentLoaded:0
         }
 
         props.appState ? this.state = {...defaultState, ...props.appState} : this.state = defaultState
@@ -156,8 +169,35 @@ export default class App extends React.Component {
             
 
             this.setState({
-                submitting:true
+                submitting:true,
+                progressStartTime:moment.now(),
+                uploadStartMoment:moment()
             })
+
+            let config = {
+                onUploadProgress: (progressEvent) => {
+                  // console.log(progressEvent)
+                  //var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+                  let percentCompleted = ((progressEvent.loaded/progressEvent.total)*100).toFixed(2)
+                  let secondsElapsed = moment().diff(this.state.uploadStartMoment, 'seconds', true)
+
+                  let chunk = progressEvent.loaded - prevLoaded
+
+                  console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
+
+                    let speed =  (((progressEvent.loaded*8)/1000 )/secondsElapsed).toFixed(2)
+
+                    
+                  console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent.loaded, speed);
+
+                  prevLoaded = progressEvent.loaded
+
+                  this.setState({
+                      progress:percentCompleted,
+                  })
+                }
+              }
+
 
             var app = this;
             const postData = new FormData();
@@ -173,19 +213,19 @@ export default class App extends React.Component {
             postData.append('result_sourcedid', $LTI_result_sourcedid);
     
     
-            axios.post('../public/api/api.php', postData)
+            axios.post('../public/api/api.php', postData, config)
             .then(function(response){
     
                 //////console.log("Single Post Success: 😃",response)
                         //this.setState({"selected_page":"map_page"})
 
-                app.setState({...app.state, ...response.data, submitting:false, submitted:true
+                app.setState({...app.state, ...response.data, submitting:false, submitted:true, progress:0
                 });
                 
-    
+                
             }).catch(function(error){
     
-                //////console.log("Single Post Fail: 😡",error.response);
+               console.log("Single Post Fail: 😡",error.response);
     
             });
     
@@ -206,6 +246,7 @@ export default class App extends React.Component {
             </ButtonsContainer>
         )
         let submissionDetails = ""
+        let percentCompletedBar = ""
 
         //console.log(this.state)
 
@@ -214,6 +255,10 @@ export default class App extends React.Component {
             if(this.state.submitting){
                 disabledFlag = "disabled"
                 submitButtonMessage = (<div>Submitting <Icon spin name="spinner"/></div>)
+                percentCompletedBar =   (<ProgressContainer>
+                    <h4>{this.state.progress}% Uploaded</h4>
+                    <Line percent={this.state.progress+''} strokeWidth="2" strokeColor="#06AFD4" />
+                </ProgressContainer>)
                 
             }else{
                 disabledFlag = ""                
@@ -300,6 +345,7 @@ export default class App extends React.Component {
 
             <VideoUpload past_deadline={this.state.past_deadline} src={this.state.src} accepted={this.state.accepted} rejected={this.state.rejected} updateState={this.updateState} />
             {buttonsContainer}
+            {percentCompletedBar}
             {submissionDetails}
             {deadlineLabel}
 
