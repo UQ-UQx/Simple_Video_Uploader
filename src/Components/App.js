@@ -185,7 +185,7 @@ export default class App extends React.Component {
 
                   console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
 
-                    let speed =  (((progressEvent.loaded*8)/1000 )/secondsElapsed).toFixed(2)
+                    let speed =  ((progressEvent.loaded/1000 )/secondsElapsed).toFixed(2)
 
                     
                   console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent.loaded, speed);
