@@ -95,7 +95,8 @@ export default class App extends React.Component {
             dueDate:null,
             progress:0,
             uploadStartMoment:null,
-            currentLoaded:0
+            currentLoaded:0,
+            speed
         }
 
         props.appState ? this.state = {...defaultState, ...props.appState} : this.state = defaultState
@@ -194,6 +195,7 @@ export default class App extends React.Component {
 
                   this.setState({
                       progress:percentCompleted,
+                      speed:speed
                   })
                 }
               }
@@ -256,7 +258,7 @@ export default class App extends React.Component {
                 disabledFlag = "disabled"
                 submitButtonMessage = (<div>Submitting <Icon spin name="spinner"/></div>)
                 percentCompletedBar =   (<ProgressContainer>
-                    <h4>{this.state.progress}% Uploaded</h4>
+                    <h4>{this.state.progress}% Uploaded ({this.state.speed} Kbps)</h4>
                     <Line percent={this.state.progress+''} strokeWidth="2" strokeColor="#06AFD4" />
                 </ProgressContainer>)
                 
