@@ -96,7 +96,7 @@ export default class App extends React.Component {
             progress:0,
             uploadStartMoment:null,
             currentLoaded:0,
-            speed
+            speed:0
         }
 
         props.appState ? this.state = {...defaultState, ...props.appState} : this.state = defaultState
