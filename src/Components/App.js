@@ -119,47 +119,50 @@ export default class App extends React.Component {
     }
 
     handleImageReset(){
-
-        if(this.state.src && (this.state.src !== "")){
-
-            //console.log("WHY ARE YOU RUNNING!!", this.state.src, (this.state.src !== ""))
-            const postData = new FormData();
-
-            postData.append('action', "remove_video");
-
-            postData.append('user_id', $LTI_userID);
-            postData.append('lti_id', $LTI_resourceID);
-
-            postData.append('src', this.state.src)
-            postData.append('lti_grade_url', $LTI_grade_url);
-            postData.append('lti_consumer_key', $LTI_consumer_key);
-            postData.append('result_sourcedid', $LTI_result_sourcedid);
-    
-    
-            axios.post('../public/api/api.php', postData)
-            .then((response)=>{
-    
-                this.setState({
-                    src:null,
-                    submission_id:null,
-                    submitted:false,
-                    accepted:[],
-                    rejected:[] 
-                });
+        if(!this.state.submitting){
+            if(this.state.src && (this.state.src !== "")){
                 
-    
-            }).catch(function(error){
-    
-                //////console.log("Single Post Fail: 😡",error.response);
-    
-            });
+                            //console.log("WHY ARE YOU RUNNING!!", this.state.src, (this.state.src !== ""))
+                            const postData = new FormData();
+                
+                            postData.append('action', "remove_video");
+                
+                            postData.append('user_id', $LTI_userID);
+                            postData.append('lti_id', $LTI_resourceID);
+                
+                            postData.append('src', this.state.src)
+                            postData.append('lti_grade_url', $LTI_grade_url);
+                            postData.append('lti_consumer_key', $LTI_consumer_key);
+                            postData.append('result_sourcedid', $LTI_result_sourcedid);
+                    
+                    
+                            axios.post('../public/api/api.php', postData)
+                            .then((response)=>{
+                    
+                                this.setState({
+                                    src:null,
+                                    submission_id:null,
+                                    submitted:false,
+                                    accepted:[],
+                                    rejected:[] 
+                                });
+                                
+                    
+                            }).catch(function(error){
+                    
+                                //////console.log("Single Post Fail: 😡",error.response);
+                    
+                            });
+                
+                        }else{
+                            this.setState({
+                                accepted:[],
+                                rejected:[]  
+                            })
+                        }
 
-        }else{
-            this.setState({
-                accepted:[],
-                rejected:[]  
-            })
         }
+        
        
 
     }
@@ -168,75 +171,79 @@ export default class App extends React.Component {
     }
 
     uploadVideoFile(){
-        if(this.state.accepted && (this.state.accepted.length > 0) ){
+        if(!this.state.submitting){
             
+            if(this.state.accepted && (this.state.accepted.length > 0)){
+                
 
-            this.setState({
-                submitting:true,
-                progressStartTime:moment.now(),
-                uploadStartMoment:moment()
-            })
+                this.setState({
+                    submitting:true,
+                    progressStartTime:moment.now(),
+                    uploadStartMoment:moment()
+                })
 
-            let config = {
-                onUploadProgress: (progressEvent) => {
-                  // console.log(progressEvent)
-                  //var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-                  let percentCompleted = ((progressEvent.loaded/progressEvent.total)*100).toFixed(2)
-                  let secondsElapsed = moment().diff(this.state.uploadStartMoment, 'seconds', true)
+                let config = {
+                    onUploadProgress: (progressEvent) => {
+                    // console.log(progressEvent)
+                    //var percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
+                    let percentCompleted = ((progressEvent.loaded/progressEvent.total)*100).toFixed(2)
+                    let secondsElapsed = moment().diff(this.state.uploadStartMoment, 'seconds', true)
 
-                  let chunk = progressEvent.loaded - prevLoaded
+                    let chunk = progressEvent.loaded - prevLoaded
 
-                  //console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
+                    //console.log("CONVERSION ",progressEvent.loaded, progressEvent.loaded/128 )
 
-                    let speed =  ((progressEvent.loaded/1000 )/secondsElapsed)
+                        let speed =  ((progressEvent.loaded/1000 )/secondsElapsed)
 
-                    let timeRemaining = ((progressEvent.total - progressEvent.loaded)/1000)/speed
-                    
-                    speed = speed.toFixed(2)
+                        let timeRemaining = ((progressEvent.total - progressEvent.loaded)/1000)/speed
+                        
+                        speed = speed.toFixed(2)
 
-                  console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent, speed, timeRemaining);
+                    console.log("difference: ", progressEvent.loaded - prevLoaded, progressEvent, speed, timeRemaining);
 
-                  prevLoaded = progressEvent.loaded
+                    prevLoaded = progressEvent.loaded
 
-                  this.setState({
-                      progress:percentCompleted,
-                      speed:speed,
-                      timeRemaining:timeRemaining
-                  })
+                    this.setState({
+                        progress:percentCompleted,
+                        speed:speed,
+                        timeRemaining:timeRemaining
+                    })
+                    }
                 }
-              }
 
 
-            var app = this;
-            const postData = new FormData();
-            postData.append('file', this.state.accepted[0]);
-            postData.append('action', "submit_video");
+                var app = this;
+                const postData = new FormData();
+                postData.append('file', this.state.accepted[0]);
+                postData.append('action', "submit_video");
 
-            postData.append('user_id', $LTI_userID);
-            postData.append('lti_id', $LTI_resourceID);
-            postData.append('course_id', $LTI_courseID);
-    
-            postData.append('lti_grade_url', $LTI_grade_url);
-            postData.append('lti_consumer_key', $LTI_consumer_key);
-            postData.append('result_sourcedid', $LTI_result_sourcedid);
-    
-    
-            axios.post('../public/api/api.php', postData, config)
-            .then(function(response){
-    
-                //////console.log("Single Post Success: 😃",response)
-                        //this.setState({"selected_page":"map_page"})
+                postData.append('user_id', $LTI_userID);
+                postData.append('lti_id', $LTI_resourceID);
+                postData.append('course_id', $LTI_courseID);
+        
+                postData.append('lti_grade_url', $LTI_grade_url);
+                postData.append('lti_consumer_key', $LTI_consumer_key);
+                postData.append('result_sourcedid', $LTI_result_sourcedid);
+        
+        
+                axios.post('../public/api/api.php', postData, config)
+                .then(function(response){
+        
+                    //////console.log("Single Post Success: 😃",response)
+                            //this.setState({"selected_page":"map_page"})
 
-                app.setState({...app.state, ...response.data, submitting:false, submitted:true, progress:0
+                    app.setState({...app.state, ...response.data, submitting:false, submitted:true, progress:0
+                    });
+                    
+                    
+                }).catch(function(error){
+        
+                console.log("Single Post Fail: 😡",error.response);
+        
                 });
-                
-                
-            }).catch(function(error){
-    
-               console.log("Single Post Fail: 😡",error.response);
-    
-            });
-    
+        
+
+            }
 
         }
     }
