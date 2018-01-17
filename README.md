@@ -1,6 +1,9 @@
-# ReactJS App with PHP API
+# Simple Video Uploader LTI
 
-This is a simple ReactJS hello world app with a PHP API.
+This tool was created for LDGM capstone, allows learners to upload videos.
+
+The tool provides a way to provide a deadline, file types, and size limit of uploads. 
+
 
 ## Get Started 
 
