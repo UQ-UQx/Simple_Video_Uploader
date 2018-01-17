@@ -97,7 +97,7 @@ export default class VideoUpload extends Component{
                     className="video-dropzone"
                     multiple={false}
                     ref="video_dropzone"
-                    maxSize={104857600}
+                    maxSize={1258291200}
 
                 >
 

@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import styled, {css} from 'styled-components'
 import uuid from 'uuid'
 
+import {Icon} from 'react-fa'
+
+
+import { detect } from "detect-browser"
 
 import { Player } from 'video-react';
 
@@ -39,30 +43,80 @@ const TableRow = styled.tr`
 
 `
 const TableCell = styled.td`
+   text-align:center;
 
 
 `
 
+const DownloadButtonContainer = styled.div`
+
+    width:100%;
+   text-align:center;
+   padding-top:50px;
+    
+
+`
+
+const HTMLVideo = styled.video`
+
+    width:100%;
+    height:auto;
+
+`
+const UnsupportedMessage = styled.div`
+
+padding: 70px 0;
+border: 3px solid black;
+background-color:darkgrey;
+text-align: center;
+
+`
 
 
 export default class Entries extends Component{
     constructor(props){
         super(props)
 
+        this.state = {
+            browser:detect()
+        };
+
         
     }
-
-
+   
     render(){
 
+        let chrome = (<UnsupportedMessage>
+            
+
+                        <p>Unfortunately video playback is not supported in this browser</p>
+                        <p>Supported Browsers: Firefox, Safari, Edge</p>
+                        <p>Please use either a supported browser (see above) or use the download button on the left to download the video</p>
+            
+                    </UnsupportedMessage>)
+            
+        
+            
         let entriesList = this.props.entries.map((entry)=>{
+            let link = "../public/videos/"+entry.course_id+"/"+entry.lti_id+"/"+entry.filename
             return (<TableRow key={uuid.v4()}>
-                <TableCell>{entry.user_id}</TableCell>
                 <TableCell>
-                    <Player
-                        playsInline
-                        src={"../public/videos/"+entry.course_id+"/"+entry.lti_id+"/"+entry.filename}
-                    />
+                    <Icon name="id-card-o" /> Submission ID: {entry.user_id}
+                    <DownloadButtonContainer>
+                        <a href={link} download><Icon name="download" size="2x" /> Download Video</a>
+                    </DownloadButtonContainer>
+                    
+                </TableCell>
+                <TableCell>
+                
+                
+                    {this.state.browser.name === "chrome" ? chrome:(<HTMLVideo controls>
+                <source src={link} type="video/mp4" />
+                Your browser does not support the video tag. 
+                Please use the download button on the left to watch the video.
+                (Please ensure you are using the latest version of Google Chrome, Mozilla Firefox or Microsoft Edge)
+        </HTMLVideo>)}
+
                 </TableCell>
             </TableRow>)
         })
@@ -74,7 +128,7 @@ export default class Entries extends Component{
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>Student Id</TableHead>
+                        <TableHead>Submission Id</TableHead>
                         <TableHead>Video</TableHead>
                     </TableRow>
                 </TableHeader>

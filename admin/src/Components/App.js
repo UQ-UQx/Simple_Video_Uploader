@@ -69,7 +69,12 @@ export default class App extends Component{
             console.log("data", data)
 
             let courses = data.map(item => item.course_id)
-            let LTIs = data.map(item => item.lti_id)
+            let LTIs = data.map((item) => {
+	            return {
+		            "lti_id":item.lti_id,
+		            "course_id":item.course_id
+	            }
+            })
 
 
 
@@ -90,16 +95,17 @@ export default class App extends Component{
         });
     }
 
-    openEntries(lti_id){
+    openEntries(lti, course){
+
+        console.log(lti, course)
 
         
         let entries = this.state.allEntries.filter((entry)=>{
-            return entry.lti_id === lti_id
+            return ((entry.lti_id === lti) && (entry.course_id === course))
         })
 
         let user_ids = entries.map(entry => entry.user_id)
 
-        console.log(entries, user_ids)
         this.setState({
             entries:entries,
             user_ids:user_ids
@@ -110,10 +116,12 @@ export default class App extends Component{
 
 
     render(){
+/*
 
-        let LTIListItems = this.state.ltis.map((lti_id)=>{
-            return (<li key={uuid.v4()}><Link onClick={()=>{this.openEntries(lti_id)}}>{lti_id}</Link></li>)
+        let LTIListItems = this.state.ltis.map((lti)=>{
+            return (<li key={uuid.v4()}><Link onClick={()=>{this.openEntries(lti)}}>{lti.lti_id}</Link></li>)
         })
+*/
 
 
 
@@ -142,7 +150,7 @@ export default class App extends Component{
 
         })
         
-
+		console.log("REA", courses)
         
         let coursesListItems = courses.map((course)=>{
             return (<li key={uuid.v4()}>
@@ -150,7 +158,7 @@ export default class App extends Component{
                     {course.course}
                     <ul>
                     {course.ltis.map((lti)=>{
-                        return (<li key={uuid.v4()}><Link onClick={()=>{this.openEntries(lti)}}>{lti}</Link></li>)
+                        return (<li key={uuid.v4()}><Link onClick={()=>{this.openEntries(lti, course.course)}}>{lti}</Link></li>)
                     })}
                     </ul>
 
@@ -158,7 +166,7 @@ export default class App extends Component{
         })
 
         let filterOptions = (<FilterOptionContainer>
-            Filter By Student ID: 
+            Filter By Submission ID: 
             <Input placeholder="e.g. f770caedc6d860f087297810891526d7_3_u1"
             
                 onChange={(event)=>{

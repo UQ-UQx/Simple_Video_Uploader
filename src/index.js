@@ -30,7 +30,14 @@ axios.get('../public/api/api.php', {
     let src = serverState.src
     let submission_id = serverState.submission_id
 
-    const dueDate = moment({ year :2017, M :10, day :27, hour :23, minute :30})
+    let dueDate = moment({ year :$DUE_YEAR, M :($DUE_MONTH-1), day :$DUE_DAY, hour :$DUE_HOUR, minute :$DUE_MINUTE})
+    
+/*
+    if($LTI_resourceID === "courses.edx.org-d3129cb4d6ac46b1b9781665be83ae5d"){
+	    
+	    dueDate = moment({ year :2018, M :10, day :27, hour :23, minute :30})
+    }
+*/
 
     console.log(dueDate.format("LLLL"))
 

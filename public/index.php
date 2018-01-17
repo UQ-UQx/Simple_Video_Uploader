@@ -33,16 +33,37 @@
 			$lti_consumer_key = $lti->lti_consumer_key();
 			$result_sourcedid = $lti->result_sourcedid();
 
-            $custom_variable_by_user_string = "woah";
-			if(isset($calldata{'custom_variable_by_user_string'})){
-				$custom_variable_by_user_string = $calldata{'custom_variable_by_user_string'};
+           
+			$custom_year = "2017";
+			if(isset($calldata{'custom_year'})){
+				$custom_year = $calldata{'custom_year'};
 			}
-
-            $custom_variable_by_user_bool = "false";
-			if(isset($calldata{'custom_variable_by_user_bool'})){
-				$custom_variable_by_user_bool = json_decode($calldata{'custom_variable_by_user_bool'});
+			
+			$custom_month = "10";
+			if(isset($calldata{'custom_month'})){
+				$custom_month = $calldata{'custom_month'};
 			}
+			
+			$custom_day = "27";
+			if(isset($calldata{'custom_day'})){
+				$custom_day = $calldata{'custom_day'};
+			}
+			
+			$custom_hour = "23";
+			if(isset($calldata{'custom_hour'})){
+				$custom_hour = $calldata{'custom_hour'};
+			}
+			
+			$custom_minute = "30";
+			if(isset($calldata{'custom_minute'})){
+				$custom_minute = $calldata{'custom_minute'};
+			}
+			
+			
             //echo $custom_variable_by_user_string;
+            
+            error_log("SIMPLE VIDEO UPLOADER: ".json_encode($calldata));
+            
         ?>
 		<link rel="stylesheet" type="text/css" href="./normalize.css">
 		<link rel="stylesheet" type="text/css" href="//code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -50,7 +71,13 @@
     </head>
     <body>
     <script type="text/javascript">
-
+	    
+	    $DUE_YEAR = parseInt('<?php echo $custom_year ?>');
+		$DUE_MONTH = parseInt('<?php echo $custom_month ?>');
+		$DUE_DAY = parseInt('<?php echo $custom_day ?>');
+		$DUE_HOUR = parseInt('<?php echo $custom_hour ?>');
+		$DUE_MINUTE = parseInt('<?php echo $custom_minute ?>');
+			    
 		$LTI_courseID = '<?php echo $course_id ?>';
 		$LTI_resourceID = '<?php echo $lti_id ?>';
 		$LTI_userID = '<?php echo $user_id ?>';
@@ -59,8 +86,7 @@
 		$LTI_grade_url = '<?php echo $lti_grade_url ?>';
 		$LTI_consumer_key = '<?php echo $lti_consumer_key ?>';
 		$LTI_result_sourcedid = '<?php echo $result_sourcedid ?>';
-
-
+		
 	</script>
     <div id="app"></div>
     <script type="text/javascript" src="./build/bundle.js"></script>

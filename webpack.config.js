@@ -111,7 +111,7 @@ var admin = {
     output: {
         path: path.join(__dirname,"admin/build"),
         filename:"bundle.js",
-        publicPath:"admin/build/"
+        publicPath:"build/"
     },
     plugins: plugins,
     //target: 'node',
